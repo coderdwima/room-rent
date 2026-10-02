@@ -6,6 +6,12 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
+const KEYS = {
+  rooms: "rrb_rooms",
+  bookings: "rrb_bookings",
+  users: "rrb_users",
+  session: "rrb_session"
+};
 
 function getSession(){ 
   return
