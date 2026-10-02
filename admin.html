@@ -64,10 +64,11 @@ async function doAdminLogin(e){
     password: pass
   });
 
-  if (error) {
-    showMsg('Incorrect admin email or password.', 'error');
+if (error) {
+    console.error("Supabase login error:", error);
+    showMsg(error.message, 'error');
     return false;
-  }
+}
 
   document.getElementById('loginBox').style.display = 'none';
   document.getElementById('dashBox').style.display = 'block';
