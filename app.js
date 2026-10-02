@@ -1,14 +1,16 @@
 
 const SUPABASE_URL = "https://ldjmnbcsnkeisuwhdpto.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY ="";
+const SUPABASE_PUBLISHABLE_KEY ="sb_publishable_bdxpf1zcROvegSWqSDlMEQ_-gJDNGod";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
 
-
-const KEYS = { rooms:"rrb_rooms", bookings:"rrb_bookings", users:"rrb_users", session:"rrb_session" };
+function getSession(){ 
+  return
+JSON.parse(localStorage.getltem(KEYS.sesson) || "null");
+                     }
 
 function uid(prefix){ return prefix + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
@@ -85,8 +87,11 @@ function renderNav(active){
   </div></nav>`;
 }
 
-function doLogout(e){
+async function doLogout(e){
   if(e) e.preventDefault();
+
+  await supabaseClient.auth.signOut();
+
   clearSession();
   window.location.href = "index.html";
 }
