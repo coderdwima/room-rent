@@ -49,42 +49,49 @@
 renderNav('admin');
 
 function showMsg(text, type){
-  document.getElementById('msg').innerHTML = `<div class="msg ${type}">${esc(text)}</div>`;
+  document.getElementById('msg').innerHTML =
+    `<div class="msg ${type}">${esc(text)}</div>`;
 }
 
-function doAdminLogin(e){
+async function doAdminLogin(e){
   e.preventDefault();
 
-  const email = document.getElementById('aEmail').value.trim().toLowerCase();
-  const pass = document.getElementById('aPass').value;
+  const email = document.getElementById('aEmail').value.trim();
+  const password = document.getElementById('aPass').value;
 
-  if(email === ADMIN_EMAIL && pass === ADMIN_PASSWORD){
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
 
-    localStorage.setItem("rrb_session", JSON.stringify({
-      role: "admin",
-      email: email,
-      name: "Admin"
-    }));
-
-    document.getElementById('loginBox').style.display = 'none';
-    document.getElementById('dashBox').style.display = 'block';
-
-    loadDashboard();
-
-  } else {
-    showMsg('Incorrect admin email or password.', 'error');
+  if (error) {
+    showMsg('Incorrect email or password.', 'error');
+    return false;
   }
+
+  document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('dashBox').style.display = 'block';
+
+  loadDashboard();
 
   return false;
 }
 
-function loadDashboard(){
-  const session = getSession();
-  if(!(session && session.role==='admin')) return;
+async function loadDashboard(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (!user) {
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('dashBox').style.display = 'none';
+    return;
+  }
+
   document.getElementById('loginBox').style.display = 'none';
   document.getElementById('dashBox').style.display = 'block';
+
   const rooms = getRooms();
   const bookings = getBookings();
+
   document.getElementById('stats').innerHTML = `
     <div class="stat"><div class="n">${rooms.length}</div><div class="l">Total rooms</div></div>
     <div class="stat"><div class="n">${rooms.filter(r=>r.available).length}</div><div class="l">Available now</div></div>
@@ -92,6 +99,7 @@ function loadDashboard(){
     <div class="stat"><div class="n">${bookings.filter(b=>b.status==='pending').length}</div><div class="l">Pending requests</div></div>
   `;
 }
+
 loadDashboard();
 </script>
 </body>
