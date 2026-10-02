@@ -57,18 +57,26 @@ async function doAdminLogin(e){
   e.preventDefault();
 
   const email = document.getElementById('aEmail').value.trim();
-  const pass = document.getElementById('aPass').value;
+  const password = document.getElementById('aPass').value;
 
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: pass
-  });
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
 
-if (error) {
+  if (error) {
     console.error("Supabase login error:", error);
     showMsg(error.message, 'error');
     return false;
-}
+  }
+
+  // Keep your existing website session system working
+  setSession({
+    role: "admin",
+    email: data.user.email,
+    name: "Admin"
+  });
 
   document.getElementById('loginBox').style.display = 'none';
   document.getElementById('dashBox').style.display = 'block';
