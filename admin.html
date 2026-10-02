@@ -85,7 +85,7 @@ async function doAdminLogin(e){
 
   return false;
 }
-}
+
 
 async function loadDashboard(){
   const { data: { user } } = await supabaseClient.auth.getUser();
