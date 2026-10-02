@@ -57,15 +57,15 @@ async function doAdminLogin(e){
   e.preventDefault();
 
   const email = document.getElementById('aEmail').value.trim();
-  const password = document.getElementById('aPass').value;
+  const pass = document.getElementById('aPass').value;
 
   const { data, error } = await supabaseClient.auth.signInWithPassword({
     email: email,
-    password: password
+    password: pass
   });
 
   if (error) {
-    showMsg('Incorrect email or password.', 'error');
+    showMsg('Incorrect admin email or password.', 'error');
     return false;
   }
 
@@ -75,6 +75,7 @@ async function doAdminLogin(e){
   loadDashboard();
 
   return false;
+}
 }
 
 async function loadDashboard(){
