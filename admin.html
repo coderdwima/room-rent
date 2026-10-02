@@ -86,9 +86,9 @@ async function doAdminLogin(e){
   return false;
 }
 
-
 async function loadDashboard(){
-  const { data: { user } } = await supabaseClient.auth.getUser();
+  const { data: { user } } =
+    await supabaseClient.auth.getUser();
 
   if (!user) {
     document.getElementById('loginBox').style.display = 'block';
@@ -103,10 +103,25 @@ async function loadDashboard(){
   const bookings = getBookings();
 
   document.getElementById('stats').innerHTML = `
-    <div class="stat"><div class="n">${rooms.length}</div><div class="l">Total rooms</div></div>
-    <div class="stat"><div class="n">${rooms.filter(r=>r.available).length}</div><div class="l">Available now</div></div>
-    <div class="stat"><div class="n">${bookings.length}</div><div class="l">Total bookings</div></div>
-    <div class="stat"><div class="n">${bookings.filter(b=>b.status==='pending').length}</div><div class="l">Pending requests</div></div>
+    <div class="stat">
+      <div class="n">${rooms.length}</div>
+      <div class="l">Total rooms</div>
+    </div>
+
+    <div class="stat">
+      <div class="n">${rooms.filter(r => r.available).length}</div>
+      <div class="l">Available now</div>
+    </div>
+
+    <div class="stat">
+      <div class="n">${bookings.length}</div>
+      <div class="l">Total bookings</div>
+    </div>
+
+    <div class="stat">
+      <div class="n">${bookings.filter(b => b.status === 'pending').length}</div>
+      <div class="l">Pending requests</div>
+    </div>
   `;
 }
 
